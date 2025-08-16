@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Type the video page title here</title>
+  <style>
+    :root { --max-video-width: 900px; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      background: #f5f7fb;
+      padding: 24px;
+    }
+    .page {
+      width: min(92vw, var(--max-video-width));
+    }
+    h1 {
+      font-size: clamp(20px, 3vw, 32px);
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+    p.desc {
+      text-align: center;
+      margin: 0 0 16px 0;
+      color: #555;
+      font-size: clamp(14px, 2.2vw, 18px);
+    }
+    .video-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      background: #000;
+    }
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 75vh;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+    button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #1f2328;
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover { background: #f0f2f4; }
+    @media (max-width: 480px) {
+      :root { --max-video-width: 680px; }
+      video { max-height: 60vh; }
+      .controls { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Replace text below -->
+    <h1>Type the video page title here</h1>
+    <p class="desc">Type the video page description here</p>
+    <div class="video-wrap">
+      <video id="vid" src="video.mp4" controls playsinline webkit-playsinline preload="metadata">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div class="controls">
+      <button id="toggle">Play / Pause</button>
+      <button id="mute">Mute / Unmute</button>
+      <button id="restart">Restart</button>
+      <button id="fs">Fullscreen</button>
+    </div>
+  </div>
+
+  <script>
+    const v = document.getElementById('vid');
+    const bToggle = document.getElementById('toggle');
+    const bMute = document.getElementById('mute');
+    const bRestart = document.getElementById('restart');
+    const bFs = document.getElementById('fs');
+
+    bToggle.addEventListener('click', () => {
+      if (v.paused) v.play(); else v.pause();
+    });
+
+    bMute.addEventListener('click', () => {
+      v.muted = !v.muted;
+    });
+
+    bRestart.addEventListener('click', () => {
+      v.currentTime = 0;
+      v.play();
+    });
+
+    bFs.addEventListener('click', async () => {
+      try {
+        if (v.requestFullscreen) await v.requestFullscreen();
+        else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+      } catch (e) {}
+    });
+  </script>
+</body>
+</html>
