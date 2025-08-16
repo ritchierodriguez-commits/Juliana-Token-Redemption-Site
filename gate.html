@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Access Gate</title>
+  <script>
+  window.onload = function() {
+    function ask() {
+      var code = prompt("JULI, WHAT IS YOUR FAVOURITE BACHATA SONG?");
+      if (code === null) {
+        document.body.innerHTML = "<h1 style='text-align:center; margin-top:50px;'>Access Cancelled</h1>";
+        return;
+      }
+      if (code.trim().toUpperCase() === "CRAZY") {
+        window.location.href = "https://ritchierodriguez-commits.github.io/Juliana-Token-Redemption-Site/";
+      } else {
+        alert("Wrong answer. Try again.");
+        ask();
+      }
+    }
+    ask();
+  };
+  </script>
+</head>
+<body>
+  <noscript>
+    <p style="text-align:center; margin-top:50px;">This page requires JavaScript to continue.</p>
+  </noscript>
+</body>
+</html>
