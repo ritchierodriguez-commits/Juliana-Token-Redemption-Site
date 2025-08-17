@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Time Gate</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
+    .message { font-size: 18px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Time Gate</h1>
+  <div class="message" id="message">Checking access...</div>
+
+  <script>
+    // ===== CONFIGURATION =====
+    const TIMER_DURATION = 2 * 60 * 1000; // 2 minutes (change this to 12 * 60 * 60 * 1000 for 12 hours)
+
+    // ===== FINAL DESTINATIONS =====
+    const finalLinks = {
+      "gateoption1": "https://ritchierodriguez-commits.github.io/Juliana-Token-Redemption-Site/Option1BJCOL.html",
+      "gateoption2": "https://ritchierodriguez-commits.github.io/Juliana-Token-Redemption-Site/Option2OILMASSAGECOL.html",
+      "gateoption3": "https://ritchierodriguez-commits.github.io/Juliana-Token-Redemption-Site/ritchievul.html"
+    };
+
+    // ===== HELPER FUNCTIONS =====
+    function getSourceGate() {
+      // Check referrer (where user came from)
+      const ref = document.referrer;
+      if (ref.includes("gateoption1")) return "gateoption1";
+      if (ref.includes("gateoption2")) return "gateoption2";
+      if (ref.includes("gateoption3")) return "gateoption3";
+      return null;
+    }
+
+    function formatTime(ms) {
+      const totalSeconds = Math.ceil(ms / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes}m ${seconds < 10 ? "0" : ""}${seconds}s`;
+    }
+
+    // ===== MAIN LOGIC =====
+    const gate = getSourceGate();
+    const messageEl = document.getElementById("message");
+
+    if (!gate) {
+      messageEl.textContent = "Access denied: Unknown source.";
+    } else {
+      const accessedKey = `timegate_accessed_${gate}`;
+      const timerKey = "timegate_timer_start";
+
+      // Check if already accessed this option
+      if (localStorage.getItem(accessedKey)) {
+        // Already unlocked, redirect instantly
+        window.location.href = finalLinks[gate];
+      } else {
+        // Check if timer has started
+        let startTime = localStorage.getItem(timerKey);
+
+        if (!startTime) {
+          // First time access → set timer
+          localStorage.setItem(timerKey, Date.now());
+          localStorage.setItem(accessedKey, "true");
+          window.location.href = finalLinks[gate];
+        } else {
+          // Timer already running
+          const elapsed = Date.now() - parseInt(startTime);
+          if (elapsed >= TIMER_DURATION) {
+            // Timer expired → allow access
+            localStorage.setItem(accessedKey, "true");
+            window.location.href = finalLinks[gate];
+          } else {
+            // Still waiting with live countdown
+            function updateCountdown() {
+              const elapsedNow = Date.now() - parseInt(startTime);
+              const remaining = TIMER_DURATION - elapsedNow;
+              if (remaining <= 0) {
+                // Timer expired → allow access
+                localStorage.setItem(accessedKey, "true");
+                window.location.href = finalLinks[gate];
+              } else {
+                messageEl.textContent = 
+                  `Access locked. Please wait ${formatTime(remaining)} before trying again.`;
+              }
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
