@@ -47,7 +47,7 @@
 // 1) Per-phase lock window (used between unlocking options)
 const TIMER_DURATION = 2 * 60 * 1000; // 2 minutes (e.g., 12 * 60 * 60 * 1000 for 12 hours)
 // 2) Global reset window — after this time elapses, ALL time gate data is cleared automatically
-const RESET_DURATION = 2 * 60 * 1000; // 2 minutes initial. Change as needed.
+const RESET_DURATION = 10 * 60 * 1000; // 10 minutes initial. Change as needed.
 
 // ===== FINAL DESTINATIONS =====
 const finalLinks = {
